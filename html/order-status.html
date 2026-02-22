@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отслеживание заказа</title>
+  
+  <!-- Яндекс.Карты API - ВАШ РЕАЛЬНЫЙ КЛЮЧ ЗДЕСЬ -->
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=4b9a5ed5-9134-4a58-85de-390193dbe3a4&lang=ru_RU" type="text/javascript"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #141414;
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    .header .icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    /* Main Content */
+    .main-content {
+      display: flex;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .main-content {
+        flex-direction: column;
+      }
+    }
+
+    /* Map Section */
+    .map-container {
+      flex: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 450px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Form Section */
+    .form-section {
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .form-section {
+        width: 100%;
+      }
+    }
+
+    .form-card {
+      background-color: #2e2e2e;
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #ffffff;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      height: 40px;
+      background-color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #141414;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: 2px solid #ffd700;
+    }
+
+    /* Route Info */
+    .route-info {
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .info-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-label {
+      color: #a0a0a0;
+      font-size: 14px;
+    }
+
+    .info-value {
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    /* Buttons */
+    .buttons-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .action-button {
+      width: 100%;
+      height: 44px;
+      background-color: #8df800da;
+      color: #141414;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .action-button:hover {
+      background-color: #ffed4e;
+      transform: translateY(-2px);
+    }
+
+    .action-button.secondary {
+      background-color: #3a3a3a;
+      color: #ffffff;
+    }
+
+    .action-button.secondary:hover {
+      background-color: #4a4a4a;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background-color: #4a4a4a;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 70%;
+      height: 100%;
+      background-color: #ffd700;
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-text {
+      font-size: 12px;
+      color: #a0a0a0;
+      text-align: right;
+    }
+
+    /* Loader */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+
+    .loader-content {
+      text-align: center;
+      color: #ffd700;
+    }
+
+    .loader-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid #333;
+      border-top: 3px solid #ffd700;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Back Button */
+    .back-button {
+      width: 100%;
+      height: 48px;
+      background-color: #ffffff;
+      color: #141414;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      text-decoration: none;
+    }
+
+    .back-button:hover {
+      opacity: 0.9;
+    }
+
+    .back-button svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Footer Status */
+    .footer-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .footer-status svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .footer-status span {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .map-container {
+        height: 300px;
+      }
+
+      .action-button {
+        padding: 14px 20px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <div id="loader-text">Загрузка...</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Отслеживание заказа</h1>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
+        <path d="M15 18H9"/>
+        <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
+        <circle cx="17" cy="18" r="2"/>
+        <circle cx="7" cy="18" r="2"/>
+      </svg>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Map -->
+      <div class="map-container">
+        <div id="map"></div>
+      </div>
+
+      <!-- Form -->
+      <div class="form-section">
+        <div class="form-card">
+          <div class="form-group">
+            <label>Откуда</label>
+            <input type="text" 
+                   id="start-point" 
+                   placeholder="Например: Минск, вокзал"
+                   value="Минск, вокзал">
+          </div>
+
+          <div class="form-group">
+            <label>Куда</label>
+            <input type="text" 
+                   id="end-point" 
+                   placeholder="Например: Гродно, центр"
+                   value="Минск, Национальная библиотека">
+          </div>
+
+          <div class="form-group">
+            <label>Транспорт</label>
+            <select id="route-type">
+              <option value="auto">🚗 На машине</option>
+              <option value="pedestrian">🚶 Пешком</option>
+              <option value="masstransit">🚌 Общественный транспорт</option>
+            </select>
+          </div>
+
+          <div class="route-info" id="route-info">
+            <div class="info-item">
+              <span class="info-label">Расстояние:</span>
+              <span class="info-value" id="distance">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Время:</span>
+              <span class="info-value" id="duration">—</span>
+            </div>
+          </div>
+
+          <div class="buttons-container">
+            <button class="action-button" id="build-route">
+              
+              Построить маршрут
+            </button>
+            <button class="action-button secondary" id="clear-route">
+              
+              Очистить
+            </button>
+          </div>
+
+          <div class="progress-container">
+            <label>Статус доставки</label>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+            <span class="progress-text">Прогресс: 70%</span>
+          </div>
+        </div>
+
+        <a class="back-button" href="/html/profile.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Вернуться назад
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer Status -->
+    <div class="footer-status">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <span id="status-text">Курьер в пути</span>
+    </div>
+  </div>
+
+  <script>
+    // Глобальные переменные
+    let map = null;
+    let multiRoute = null;
+    let startPlacemark = null;
+    let endPlacemark = null;
+
+    // Инициализация карты
+    ymaps.ready(initMap);
+
+    function initMap() {
+      try {
+        // Создаем карту
+        map = new ymaps.Map('map', {
+          center: [53.9, 27.5667], // Минск
+          zoom: 10,
+          controls: ['zoomControl', 'fullscreenControl']
+        });
+
+        // Создаем метки
+        createPlacemarks();
+        
+        // Настройка обработчиков
+        setupEventListeners();
+
+        console.log('✅ Яндекс.Карты загружены');
+
+        // Автоматически строим демо-маршрут
+        setTimeout(() => {
+          buildRoute();
+        }, 1000);
+
+      } catch (error) {
+        console.error('❌ Ошибка загрузки карты:', error);
+        showError('Не удалось загрузить Яндекс.Карты. Проверьте API ключ.');
+      }
+    }
+
+    // Создание меток
+    function createPlacemarks() {
+      // Стартовая метка
+      startPlacemark = new ymaps.Placemark([53.9, 27.5667], {
+        hintContent: 'Точка отправления',
+        balloonContent: 'Укажите адрес отправления'
+      }, {
+        preset: 'islands#redIcon',
+        iconColor: '#ffd700'
+      });
+
+      // Конечная метка
+      endPlacemark = new ymaps.Placemark([53.9, 27.6667], {
+        hintContent: 'Точка доставки',
+        balloonContent: 'Укажите адрес доставки'
+      }, {
+        preset: 'islands#greenIcon',
+        iconColor: '#10b981'
+      });
+
+      // Добавляем метки на карту
+      map.geoObjects.add(startPlacemark);
+      map.geoObjects.add(endPlacemark);
+    }
+
+    // Настройка обработчиков событий
+    function setupEventListeners() {
+      // Построить маршрут
+      document.getElementById('build-route').addEventListener('click', buildRoute);
+      
+      // Очистить маршрут
+      document.getElementById('clear-route').addEventListener('click', clearRoute);
+      
+      // Изменение типа маршрута
+      document.getElementById('route-type').addEventListener('change', function() {
+        if (multiRoute) {
+          buildRoute();
+        }
+      });
+      
+      // Enter в полях ввода
+      document.getElementById('start-point').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') buildRoute();
+      });
+      
+      document.getElementById('end-point').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') buildRoute();
+      });
+    }
+
+    // Показать загрузчик
+    function showLoader(text) {
+      const loader = document.getElementById('loader');
+      const loaderText = document.getElementById('loader-text');
+      
+      loaderText.textContent = text || 'Загрузка...';
+      loader.style.display = 'flex';
+    }
+
+    // Скрыть загрузчик
+    function hideLoader() {
+      document.getElementById('loader').style.display = 'none';
+    }
+
+    // Показать ошибку
+    function showError(message) {
+      alert('❌ ' + message);
+    }
+
+    // Построить маршрут
+    async function buildRoute() {
+      const startAddress = document.getElementById('start-point').value.trim();
+      const endAddress = document.getElementById('end-point').value.trim();
+      const routeType = document.getElementById('route-type').value;
+
+      // Проверка ввода
+      if (!startAddress || !endAddress) {
+        showError('Введите обе точки маршрута');
+        return;
+      }
+
+      showLoader('Построение маршрута...');
+
+      try {
+        // Получаем координаты для адресов
+        const startResult = await geocodeAddress(startAddress);
+        const endResult = await geocodeAddress(endAddress);
+
+        if (!startResult || !endResult) {
+          showError('Не удалось найти адреса');
+          hideLoader();
+          return;
+        }
+
+        // Обновляем метки
+        updatePlacemark('start', startResult.coords, startResult.address);
+        updatePlacemark('end', endResult.coords, endResult.address);
+
+        // Удаляем старый маршрут
+        if (multiRoute) {
+          map.geoObjects.remove(multiRoute);
+        }
+
+        // Создаем новый маршрут
+        multiRoute = new ymaps.multiRouter.MultiRoute({
+          referencePoints: [
+            startResult.coords,
+            endResult.coords
+          ],
+          params: {
+            routingMode: routeType
+          }
+        }, {
+          boundsAutoApply: true,
+          routeActiveStrokeWidth: 4,
+          routeActiveStrokeColor: '#ffd700',
+          routeActiveStrokeStyle: 'solid'
+        });
+
+        // Добавляем маршрут на карту
+        map.geoObjects.add(multiRoute);
+
+        // Обработка успешного построения
+        multiRoute.model.events.add('requestsuccess', function() {
+          updateRouteInfo();
+          hideLoader();
+          updateProgress();
+        });
+
+        // Обработка ошибки
+        multiRoute.model.events.add('requestfail', function() {
+          showError('Не удалось построить маршрут');
+          hideLoader();
+        });
+
+      } catch (error) {
+        console.error('Ошибка построения маршрута:', error);
+        showError('Ошибка при построении маршрута');
+        hideLoader();
+      }
+    }
+
+    // Геокодирование адреса
+    function geocodeAddress(address) {
+      return new Promise((resolve) => {
+        ymaps.geocode(address, {
+          results: 1
+        }).then(function(res) {
+          const geoObject = res.geoObjects.get(0);
+          
+          if (geoObject) {
+            resolve({
+              coords: geoObject.geometry.getCoordinates(),
+              address: geoObject.getAddressLine()
+            });
+          } else {
+            resolve(null);
+          }
+        }, function() {
+          resolve(null);
+        });
+      });
+    }
+
+    // Обновить метку
+    function updatePlacemark(pointType, coords, address) {
+      const placemark = pointType === 'start' ? startPlacemark : endPlacemark;
+      
+      placemark.geometry.setCoordinates(coords);
+      placemark.properties.set({
+        balloonContent: address,
+        hintContent: address
+      });
+    }
+
+    // Обновить информацию о маршруте
+    function updateRouteInfo() {
+      if (!multiRoute) return;
+      
+      try {
+        const routes = multiRoute.getRoutes();
+        if (routes && routes.length > 0) {
+          const route = routes.get(0);
+          const properties = route.properties.getAll();
+
+          // Обновляем расстояние и время
+          if (properties.distance && properties.duration) {
+            document.getElementById('distance').textContent = properties.distance.text;
+            document.getElementById('duration').textContent = properties.duration.text;
+            
+            // Показываем блок с информацией
+            document.getElementById('route-info').style.display = 'block';
+          }
+        }
+      } catch (error) {
+        console.log('Не удалось обновить информацию о маршруте');
+      }
+    }
+
+    // Обновить прогресс
+    function updateProgress() {
+      const durationText = document.getElementById('duration').textContent;
+      const progressFill = document.querySelector('.progress-fill');
+      const progressText = document.querySelector('.progress-text');
+      const statusText = document.getElementById('status-text');
+      
+      // Логика определения прогресса на основе времени
+      let progress = 70;
+      let status = 'Курьер в пути';
+      
+      if (durationText.includes('ч')) {
+        const hours = parseInt(durationText);
+        if (hours > 2) {
+          progress = 30;
+          status = 'Заказ собирается';
+        } else if (hours > 1) {
+          progress = 50;
+          status = 'Курьер выехал';
+        }
+      } else if (durationText.includes('мин') && parseInt(durationText) < 30) {
+        progress = 90;
+        status = 'Курьер скоро прибудет';
+      }
+      
+      // Анимация изменения прогресса
+      progressFill.style.width = progress + '%';
+      progressText.textContent = `Прогресс: ${progress}%`;
+      statusText.textContent = status;
+    }
+
+    // Очистить маршрут
+    function clearRoute() {
+      document.getElementById('start-point').value = '';
+      document.getElementById('end-point').value = '';
+      document.getElementById('distance').textContent = '—';
+      document.getElementById('duration').textContent = '—';
+      
+      // Сбрасываем метки
+      startPlacemark.geometry.setCoordinates([53.9, 27.5667]);
+      endPlacemark.geometry.setCoordinates([53.9, 27.6667]);
+      
+      // Удаляем маршрут
+      if (multiRoute) {
+        map.geoObjects.remove(multiRoute);
+        multiRoute = null;
+      }
+      
+      // Скрываем информацию
+      document.getElementById('route-info').style.display = 'none';
+      
+      // Сбрасываем прогресс
+      const progressFill = document.querySelector('.progress-fill');
+      const progressText = document.querySelector('.progress-text');
+      const statusText = document.getElementById('status-text');
+      
+      progressFill.style.width = '70%';
+      progressText.textContent = 'Прогресс: 70%';
+      statusText.textContent = 'Курьер в пути';
+      
+      // Центрируем карту
+      map.setCenter([53.9, 27.5667], 10);
+    }
+
+    // Инициализация при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Страница загружена');
+    });
+  </script>
+</body>
+</html>
