@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Отслеживание заказа</title>
+  <link rel="stylesheet" href="/css/style.css">
   
   <!-- Яндекс.Карты API - ВАШ РЕАЛЬНЫЙ КЛЮЧ ЗДЕСЬ -->
   <script src="https://api-maps.yandex.ru/2.1/?apikey=4b9a5ed5-9134-4a58-85de-390193dbe3a4&lang=ru_RU" type="text/javascript"></script>
@@ -20,52 +21,50 @@
       background-color: #141414;
       color: #ffffff;
       min-height: 100vh;
-      padding: 40px;
+      padding: 30px;
+      padding-top: 140px;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
+      width: 100%;
       margin: 0 auto;
+      padding: 0 20px;
     }
 
-    /* Header */
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+    /* Шапка страницы */
+    .page-header {
       margin-bottom: 24px;
     }
 
-    .header h1 {
-      font-size: 36px;
+    .page-header h1 {
+      font-size: 28px;
       font-weight: 700;
+      color: #fff;
     }
 
-    .header .icon {
-      width: 40px;
-      height: 40px;
-    }
-
-    /* Main Content */
+    /* Main Content - основной контейнер */
     .main-content {
       display: flex;
       gap: 24px;
+      width: 100%;
     }
 
-    @media (max-width: 900px) {
-      .main-content {
-        flex-direction: column;
-      }
-    }
-
-    /* Map Section */
-    .map-container {
+    /* Карта - основной элемент */
+    .map-wrapper {
       flex: 1;
-      border-radius: 20px;
+      min-width: 0;
+    }
+
+    .map-container {
+      width: 100%;
+      height: 500px;
+      border-radius: 16px;
       overflow: hidden;
-      height: 450px;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     #map {
@@ -73,104 +72,82 @@
       height: 100%;
     }
 
-    /* Form Section */
-    .form-section {
-      width: 320px;
+    /* Панель управления - справа */
+    .control-panel {
+      width: 340px;
+      flex-shrink: 0;
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
 
-    @media (max-width: 900px) {
-      .form-section {
-        width: 100%;
-      }
+    /* Карточки панели */
+    .panel-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
     }
 
-    .form-card {
-      background-color: #2e2e2e;
-      border-radius: 20px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    .panel-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #fff;
     }
 
     .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
     }
 
     .form-group label {
-      font-size: 14px;
+      display: block;
+      font-size: 13px;
       font-weight: 500;
-      color: #ffffff;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 6px;
     }
 
     .form-group input,
     .form-group select {
       width: 100%;
-      height: 40px;
-      background-color: #ffffff;
-      border: none;
+      height: 42px;
+      background: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       padding: 0 12px;
       font-size: 14px;
-      color: #141414;
+      color: #000000;
+      cursor: pointer;
+    }
+
+    .form-group select option {
+      background: #ffffff;
+      color: #000000;
+      padding: 10px;
+    }
+
+    .form-group input::placeholder {
+      color: rgba(0, 0, 0, 0.5);
     }
 
     .form-group input:focus,
     .form-group select:focus {
-      outline: 2px solid #ffd700;
+      outline: none;
+      border-color: #667eea;
     }
 
-    /* Route Info */
-    .route-info {
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 10px;
-      display: none;
-    }
-
-    .info-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .info-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .info-label {
-      color: #a0a0a0;
-      font-size: 14px;
-    }
-
-    .info-value {
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 16px;
-    }
-
-    /* Buttons */
-    .buttons-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .action-button {
+    /* Кнопки */
+    .btn {
       width: 100%;
       height: 44px;
-      background-color: #8df800da;
-      color: #141414;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
+      border-radius: 10px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
@@ -180,152 +157,278 @@
       gap: 8px;
     }
 
-    .action-button:hover {
-      background-color: #ffed4e;
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
       transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
 
-    .action-button.secondary {
-      background-color: #3a3a3a;
-      color: #ffffff;
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .action-button.secondary:hover {
-      background-color: #4a4a4a;
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
     }
 
-    /* Progress Bar */
-    .progress-container {
+    /* Прогресс */
+    .progress-section {
+      margin-top: 8px;
+    }
+
+    .progress-label {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      justify-content: space-between;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 8px;
     }
 
     .progress-bar {
-      width: 100%;
-      height: 12px;
-      background-color: #4a4a4a;
-      border-radius: 6px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
       overflow: hidden;
     }
 
     .progress-fill {
-      width: 70%;
       height: 100%;
-      background-color: #ffd700;
-      border-radius: 6px;
-      transition: width 0.5s ease;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 4px;
+      transition: width 0.5s;
     }
 
-    .progress-text {
-      font-size: 12px;
-      color: #a0a0a0;
-      text-align: right;
-    }
-
-    /* Loader */
-    .loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      flex-direction: column;
-    }
-
-    .loader-content {
-      text-align: center;
-      color: #ffd700;
-    }
-
-    .loader-spinner {
-      width: 50px;
-      height: 50px;
-      border: 3px solid #333;
-      border-top: 3px solid #ffd700;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Back Button */
-    .back-button {
-      width: 100%;
-      height: 48px;
-      background-color: #ffffff;
-      color: #141414;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-      text-decoration: none;
-    }
-
-    .back-button:hover {
-      opacity: 0.9;
-    }
-
-    .back-button svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    /* Footer Status */
-    .footer-status {
+    /* Статус */
+    .status-bar {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-top: 32px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      margin-top: 16px;
     }
 
-    .footer-status svg {
-      width: 28px;
-      height: 28px;
+    .status-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(102, 126, 234, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .footer-status span {
-      font-size: 18px;
+    .status-text {
+      font-size: 14px;
       font-weight: 500;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
+    /* Информация о маршруте */
+    .route-info {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .route-info.active {
+      display: grid;
+    }
+
+    .route-item {
+      text-align: center;
+    }
+
+    .route-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .route-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Назад кнопка */
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #667eea;
+    }
+
+    /* Адаптив для планшетов */
+    @media (max-width: 1024px) {
       body {
-        padding: 20px;
+        padding: 24px;
+        padding-top: 130px;
       }
 
-      .header h1 {
-        font-size: 28px;
+      .main-content {
+        gap: 20px;
+      }
+
+      .map-container {
+        height: 400px;
+      }
+
+      .control-panel {
+        width: 300px;
+      }
+    }
+
+    /* Адаптив для мобильных */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+        padding-top: 120px;
+      }
+
+      .page-header h1 {
+        font-size: 22px;
+      }
+
+      .main-content {
+        flex-direction: column;
       }
 
       .map-container {
         height: 300px;
       }
 
-      .action-button {
-        padding: 14px 20px;
-        font-size: 1rem;
+      .control-panel {
+        width: 100%;
+      }
+
+      .route-info {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Адаптив для маленьких мобильных */
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+        padding-top: 100px;
+      }
+
+      .map-container {
+        height: 250px;
+      }
+
+      .panel-card {
+        padding: 16px;
+      }
+
+      .page-header h1 {
+        font-size: 20px;
+      }
+    }
+
+    /* Стили шапки */
+    .navbar-wrap {
+      top: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-wrap {
+        top: 8px;
+        padding: 0 12px;
+      }
+      
+      .navbar-logo-link svg {
+        width: 180px;
+        height: auto;
+      }
+      
+      .navbar {
+        padding: 0 12px;
+        height: 42px;
+      }
+      
+      .navbar-menu {
+        gap: 12px;
+      }
+      
+      .navbar-menu li a {
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar-wrap {
+        padding: 0 8px;
+      }
+      
+      .navbar-logo-link svg {
+        width: 140px;
+      }
+      
+      .navbar {
+        height: 38px;
+        padding: 0 10px;
+      }
+      
+      .navbar-menu li a {
+        font-size: 9px;
+      }
+      
+      .navbar-profile svg {
+        width: 22px;
+        height: 22px;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Шапка сайта -->
+  <header class="navbar-wrap">
+    <a href="/index.html" class="navbar-logo-link">
+      <svg width="300" height="65" viewBox="0 0 451 97" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M137.25 69.09C137.05 70.93 136.4 72.56 135.3 73.98C134.22 75.38 132.8 76.47 131.04 77.25C129.28 78.03 127.27 78.42 125.01 78.42C122.49 78.42 120.28 77.93 118.38 76.95C116.48 75.97 115 74.61 113.94 72.87C112.88 71.11 112.35 69.07 112.35 66.75C112.35 64.43 112.88 62.4 113.94 60.66C115 58.9 116.48 57.53 118.38 56.55C120.28 55.57 122.49 55.08 125.01 55.08C127.27 55.08 129.28 55.47 131.04 56.25C132.8 57.03 134.22 58.12 135.3 59.52C136.4 60.92 137.05 62.55 137.25 64.41H133.26C133.04 63.21 132.56 62.18 131.82 61.32C131.1 60.46 130.16 59.8 129 59.34C127.84 58.86 126.5 58.62 124.98 58.62C123.22 58.62 121.69 58.95 120.39 59.61C119.11 60.27 118.12 61.21 117.42 62.43C116.72 63.65 116.37 65.09 116.37 66.75C116.37 68.41 116.72 69.85 117.42 71.07C118.12 72.29 119.11 73.23 120.39 73.89C121.69 74.55 123.22 74.88 124.98 74.88C126.5 74.88 127.84 74.65 129 74.19C130.16 73.73 131.1 73.07 131.82 72.21C132.56 71.33 133.04 70.29 133.26 69.09H137.25ZM140.433 60.9L142.383 61.26L144.333 60.9V78H140.433V60.9ZM142.383 58.77C141.643 58.77 141.033 58.57 140.553 58.17C140.073 57.75 139.833 57.21 139.833 56.55C139.833 55.89 140.073 55.36 140.553 54.96C141.033 54.54 141.643 54.33 142.383 54.33C143.143 54.33 143.753 54.54 144.213 54.96C144.693 55.36 144.933 55.89 144.933 56.55C144.933 57.21 144.693 57.75 144.213 58.17C143.753 58.57 143.143 58.77 142.383 58.77Z" fill="white"/>
+        <path d="M2.98237 91.7576H450.017" stroke="white" stroke-width="5"/>
+        <path d="M406.25 80.4791C408.29 80.4791 409.938 78.8321 409.938 76.7916C409.938 74.7512 408.29 73.1041 406.25 73.1041C404.21 73.1041 402.563 74.7512 402.563 76.7916C402.563 78.8321 404.21 80.4791 406.25 80.4791ZM409.938 58.3541H403.792V64.5H414.756L409.938 58.3541ZM376.75 80.4791C378.79 80.4791 380.438 78.8321 380.438 76.7916C380.438 74.7512 378.79 73.1041 376.75 73.1041C374.71 73.1041 373.063 74.7512 373.063 76.7916C373.063 78.8321 374.71 80.4791 376.75 80.4791ZM411.167 54.6666L418.542 64.5V76.7916H413.625C413.625 80.8725 410.331 84.1666 406.25 84.1666C402.169 84.1666 398.875 80.8725 398.875 76.7916H384.125C384.125 80.8725 380.831 84.1666 376.75 84.1666C372.669 84.1666 369.375 80.8725 369.375 76.7916H364.458V49.75C369.375 49.75 369.375 71.875 369.375 71.875H371.243C372.595 70.3754 374.562 69.4166 376.75 69.4166C378.938 69.4166 380.905 70.3754 382.257 71.875H398.875V49.75H369.375Z" fill="white"/>
+      </svg>
+    </a>
+    <button class="burger-menu" id="burgerButton" aria-label="Меню">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav class="navbar" id="navbar">
+      <div class="container">
+        <ul class="navbar-menu">
+          <li><a href="/html/about.html">О нас</a></li>
+          <li><a href="/html/order.html">Оставить заявку</a></li>
+          <li><a href="/html/contacts.html">Контакты</a></li>
+          <li><a href="/html/order-status.html">Отследить заказ</a></li>
+        </ul>
+        <a href="/html/profile.html" class="navbar-profile">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M18 6C19.5913 6 21.1174 6.63214 22.2426 7.75736C23.3679 8.88258 24 10.4087 24 12C24 13.5913 23.3679 15.1174 22.2426 16.2426C21.1174 17.3679 19.5913 18 18 18C16.4087 18 14.8826 17.3679 13.7574 16.2426C12.6321 15.1174 12 13.5913 12 12C12 10.4087 12.6321 8.88258 13.7574 7.75736C14.8826 6.63214 16.4087 6 18 6ZM18 21C24.63 21 30 23.685 30 27V30H6V27C6 23.685 11.37 21 18 21Z" fill="currentColor"/>
+          </svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+
   <!-- Loader -->
   <div class="loader" id="loader">
     <div class="loader-content">
@@ -335,33 +438,45 @@
   </div>
 
   <div class="container">
-    <!-- Header -->
-    <div class="header">
+    <!-- Заголовок страницы -->
+    <div class="page-header">
       <h1>Отслеживание заказа</h1>
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
-        <path d="M15 18H9"/>
-        <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
-        <circle cx="17" cy="18" r="2"/>
-        <circle cx="7" cy="18" r="2"/>
-      </svg>
     </div>
 
-    <!-- Main Content -->
+    <!-- Основной контент -->
     <div class="main-content">
-      <!-- Map -->
-      <div class="map-container">
-        <div id="map"></div>
+      <!-- Карта -->
+      <div class="map-wrapper">
+        <div class="map-container">
+          <div id="map"></div>
+        </div>
       </div>
 
-      <!-- Form -->
-      <div class="form-section">
-        <div class="form-card">
+      <!-- Панель управления -->
+      <div class="control-panel">
+        <!-- Выбор заказа -->
+        <div class="panel-card" id="orderSelector">
+          <h3>Выберите заказ</h3>
+          <div class="form-group">
+            <select id="orderSelect">
+              <option value="">Загрузка заказов...</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="no-orders" id="noOrders" style="display: none;">
+          <p>У вас пока нет заказов</p>
+          <p><a href="/html/order.html">Создать заказ</a></p>
+        </div>
+
+        <!-- Детали заказа -->
+        <div class="panel-card" id="orderDetails" style="display: none;">
+          <h3>Маршрут</h3>
           <div class="form-group">
             <label>Откуда</label>
             <input type="text" 
                    id="start-point" 
-                   placeholder="Например: Минск, вокзал"
+                   placeholder="Адрес отправления"
                    value="Минск, вокзал">
           </div>
 
@@ -369,66 +484,64 @@
             <label>Куда</label>
             <input type="text" 
                    id="end-point" 
-                   placeholder="Например: Гродно, центр"
+                   placeholder="Адрес доставки"
                    value="Минск, Национальная библиотека">
           </div>
 
           <div class="form-group">
             <label>Транспорт</label>
             <select id="route-type">
-              <option value="auto">🚗 На машине</option>
-              <option value="pedestrian">🚶 Пешком</option>
-              <option value="masstransit">🚌 Общественный транспорт</option>
+              <option value="auto">На машине</option>
+              <option value="pedestrian">Пешком</option>
+              <option value="masstransit">Общественный транспорт</option>
             </select>
           </div>
 
+          <button class="btn btn-primary" id="build-route">
+            Построить маршрут
+          </button>
+
           <div class="route-info" id="route-info">
-            <div class="info-item">
-              <span class="info-label">Расстояние:</span>
-              <span class="info-value" id="distance">—</span>
+            <div class="route-item">
+              <div class="route-value" id="distance">—</div>
+              <div class="route-label">Расстояние</div>
             </div>
-            <div class="info-item">
-              <span class="info-label">Время:</span>
-              <span class="info-value" id="duration">—</span>
+            <div class="route-item">
+              <div class="route-value" id="duration">—</div>
+              <div class="route-label">Время</div>
             </div>
           </div>
 
-          <div class="buttons-container">
-            <button class="action-button" id="build-route">
-              
-              Построить маршрут
-            </button>
-            <button class="action-button secondary" id="clear-route">
-              
-              Очистить
-            </button>
-          </div>
-
-          <div class="progress-container">
-            <label>Статус доставки</label>
+          <div class="progress-section">
+            <div class="progress-label">
+              <span>Статус доставки</span>
+              <span id="progress-text">70%</span>
+            </div>
             <div class="progress-bar">
-              <div class="progress-fill"></div>
+              <div class="progress-fill" style="width: 70%"></div>
             </div>
-            <span class="progress-text">Прогресс: 70%</span>
           </div>
         </div>
 
-        <a class="back-button" href="/html/profile.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <!-- Статус -->
+        <div class="status-bar">
+          <div class="status-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="status-text" id="status-text">Курьер в пути</div>
+        </div>
+
+        <!-- Кнопка назад -->
+        <a class="back-link" href="/html/profile.html">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
-          Вернуться назад
+          Вернуться в профиль
         </a>
       </div>
-    </div>
-
-    <!-- Footer Status -->
-    <div class="footer-status">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"></circle>
-        <polyline points="12 6 12 12 16 14"></polyline>
-      </svg>
-      <span id="status-text">Курьер в пути</span>
     </div>
   </div>
 
@@ -438,6 +551,98 @@
     let multiRoute = null;
     let startPlacemark = null;
     let endPlacemark = null;
+    let orders = [];
+
+    // Загрузка заказов при загрузке страницы
+    document.addEventListener('DOMContentLoaded', async function() {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        document.getElementById('orderSelector').style.display = 'none';
+        document.getElementById('noOrders').style.display = 'block';
+        document.getElementById('noOrders').innerHTML = '<p>Пожалуйста, войдите в систему</p><p><a href="/index.html">Войти</a></p>';
+        return;
+      }
+      
+      try {
+        const response = await fetch('http://localhost:5000/api/orders', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          orders = data.data.orders;
+          
+          const orderSelect = document.getElementById('orderSelect');
+          orderSelect.innerHTML = '<option value="">Выберите заказ</option>';
+          
+          if (orders.length === 0) {
+            document.getElementById('orderSelector').style.display = 'none';
+            document.getElementById('noOrders').style.display = 'block';
+          } else {
+            orders.forEach(order => {
+              const option = document.createElement('option');
+              option.value = order.id;
+              option.textContent = `Заказ #${order.id} - ${order.pickupAddress} → ${order.deliveryAddress}`;
+              orderSelect.appendChild(option);
+            });
+            
+            // Проверяем, есть ли последний созданный заказ
+            const lastOrderId = localStorage.getItem('lastOrderId');
+            if (lastOrderId) {
+              orderSelect.value = lastOrderId;
+              localStorage.removeItem('lastOrderId');
+              loadOrderDetails(lastOrderId);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки заказов:', error);
+      }
+    });
+
+    // Обработчик выбора заказа
+    document.addEventListener('DOMContentLoaded', function() {
+      const orderSelect = document.getElementById('orderSelect');
+      if (orderSelect) {
+        orderSelect.addEventListener('change', function() {
+          const orderId = this.value;
+          if (orderId) {
+            loadOrderDetails(orderId);
+          }
+        });
+      }
+    });
+
+    // Загрузка деталей заказа
+    function loadOrderDetails(orderId) {
+      const order = orders.find(o => o.id == orderId);
+      if (!order) return;
+      
+      // Заполняем поля формы данными из заказа
+      document.getElementById('start-point').value = order.pickupAddress || '';
+      document.getElementById('end-point').value = order.deliveryAddress || '';
+      
+      // Показываем детали заказа
+      document.getElementById('orderDetails').style.display = 'block';
+      
+      // Обновляем статус
+      const statusText = document.getElementById('status-text');
+      if (order.status === 'pending') {
+        statusText.textContent = 'Заказ ожидает обработки';
+      } else if (order.status === 'in_progress') {
+        statusText.textContent = 'Заказ в пути';
+      } else if (order.status === 'delivered') {
+        statusText.textContent = 'Заказ доставлен';
+      }
+      
+      // Автоматически строим маршрут
+      setTimeout(() => {
+        buildRoute();
+      }, 500);
+    }
 
     // Инициализация карты
     ymaps.ready(initMap);
@@ -446,8 +651,8 @@
       try {
         // Создаем карту
         map = new ymaps.Map('map', {
-          center: [53.9, 27.5667], // Минск
-          zoom: 10,
+          center: [53.6698, 23.8131], // Гродно
+          zoom: 12,
           controls: ['zoomControl', 'fullscreenControl']
         });
 
@@ -473,16 +678,16 @@
     // Создание меток
     function createPlacemarks() {
       // Стартовая метка
-      startPlacemark = new ymaps.Placemark([53.9, 27.5667], {
+      startPlacemark = new ymaps.Placemark([53.6698, 23.8131], {
         hintContent: 'Точка отправления',
         balloonContent: 'Укажите адрес отправления'
       }, {
         preset: 'islands#redIcon',
-        iconColor: '#ffd700'
+        iconColor: '#667eea'
       });
 
       // Конечная метка
-      endPlacemark = new ymaps.Placemark([53.9, 27.6667], {
+      endPlacemark = new ymaps.Placemark([53.7098, 23.8131], {
         hintContent: 'Точка доставки',
         balloonContent: 'Укажите адрес доставки'
       }, {
@@ -499,9 +704,6 @@
     function setupEventListeners() {
       // Построить маршрут
       document.getElementById('build-route').addEventListener('click', buildRoute);
-      
-      // Очистить маршрут
-      document.getElementById('clear-route').addEventListener('click', clearRoute);
       
       // Изменение типа маршрута
       document.getElementById('route-type').addEventListener('change', function() {
@@ -585,7 +787,7 @@
         }, {
           boundsAutoApply: true,
           routeActiveStrokeWidth: 4,
-          routeActiveStrokeColor: '#ffd700',
+          routeActiveStrokeColor: '#667eea',
           routeActiveStrokeStyle: 'solid'
         });
 
@@ -661,7 +863,7 @@
             document.getElementById('duration').textContent = properties.duration.text;
             
             // Показываем блок с информацией
-            document.getElementById('route-info').style.display = 'block';
+            document.getElementById('route-info').classList.add('active');
           }
         }
       } catch (error) {
@@ -673,7 +875,7 @@
     function updateProgress() {
       const durationText = document.getElementById('duration').textContent;
       const progressFill = document.querySelector('.progress-fill');
-      const progressText = document.querySelector('.progress-text');
+      const progressText = document.getElementById('progress-text');
       const statusText = document.getElementById('status-text');
       
       // Логика определения прогресса на основе времени
@@ -696,7 +898,7 @@
       
       // Анимация изменения прогресса
       progressFill.style.width = progress + '%';
-      progressText.textContent = `Прогресс: ${progress}%`;
+      progressText.textContent = progress + '%';
       statusText.textContent = status;
     }
 
@@ -730,7 +932,7 @@
       statusText.textContent = 'Курьер в пути';
       
       // Центрируем карту
-      map.setCenter([53.9, 27.5667], 10);
+      map.setCenter([53.6698, 23.8131], 12);
     }
 
     // Инициализация при загрузке
