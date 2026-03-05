@@ -2,7 +2,72 @@
 // КОНФИГУРАЦИЯ
 // ============================================
 
-const API_URL = 'http://localhost:5000/api'; // URL вашего Node.js сервера
+const API_URL = 'http://localhost:5000/api';
+
+// ============================================
+// АВТОМАТИЧЕСКАЯ ПОДСВЕТКА АКТИВНОГО ПУНКТА МЕНЮ
+// ============================================
+function setActiveNavLink() {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.navbar-menu li a');
+    
+    // Не подсвечивать на главной странице (index.html или /)
+    const isMainPage = currentPath === '/' || 
+                       currentPath === '/index.html' || 
+                       currentPath.endsWith('index.html');
+    
+    if (isMainPage) return;
+    
+    // Получаем имя файла без пути и расширения
+    const pageName = currentPath.split('/').pop().replace('.html', '');
+    
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (!href) return;
+        
+        // Получаем имя файла из href (убираем все пути)
+        const linkName = href.replace(/^.*\//, '').replace('.html', '');
+        
+        // Точное совпадение имен файлов
+        if (pageName === linkName) {
+            link.classList.add('active');
+        }
+    });
+}
+
+// ============================================
+// ГЛОБАЛЬНЫЕ ФУНКЦИИ
+// ============================================
+
+window.updateProfileIcon = function(isLoggedIn) {
+    const profileIcon = document.querySelector('.navbar-profile');
+    if (!profileIcon) return;
+    
+    if (isLoggedIn) {
+        profileIcon.innerHTML = `
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <circle cx="18" cy="18" r="18" fill="#4CAF50"/>
+                <path d="M18 6C19.5913 6 21.1174 6.63214 22.2426 7.75736C23.3679 8.88258 24 10.4087 24 12C24 13.5913 23.3679 15.1174 22.2426 16.2426C21.1174 17.3679 19.5913 18 18 18C16.4087 18 14.8826 17.3679 13.7574 16.2426C12.6321 15.1174 12 13.5913 12 12C12 10.4087 12.6321 8.88258 13.7574 7.75736C14.8826 6.63214 16.4087 6 18 6ZM18 21C24.63 21 30 23.685 30 27V30H6V27C6 23.685 11.37 21 18 21Z" fill="white"/>
+            </svg>
+        `;
+        
+        profileIcon.onclick = function(e) {
+            e.preventDefault();
+            showProfileMenu();
+        };
+    } else {
+        profileIcon.innerHTML = `
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <path d="M18 6C19.5913 6 21.1174 6.63214 22.2426 7.75736C23.3679 8.88258 24 10.4087 24 12C24 13.5913 23.3679 15.1174 22.2426 16.2426C21.1174 17.3679 19.5913 18 18 18C16.4087 18 14.8826 17.3679 13.7574 16.2426C12.6321 15.1174 12 13.5913 12 12C12 10.4087 12.6321 8.88258 13.7574 7.75736C14.8826 6.63214 16.4087 6 18 6ZM18 21C24.63 21 30 23.685 30 27V30H6V27C6 23.685 11.37 21 18 21Z" fill="currentColor"/>
+            </svg>
+        `;
+        
+        profileIcon.onclick = function(e) {
+            e.preventDefault();
+            openModal('login');
+        };
+    }
+};
 
 // ============================================
 // МОДАЛЬНОЕ ОКНО И ТАБЫ
@@ -199,40 +264,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  function updateProfileIcon(isLoggedIn) {
-    if (!profileIcon) return;
-    
-    if (isLoggedIn) {
-      // Иконка для авторизованного пользователя
-      profileIcon.innerHTML = `
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-          <circle cx="18" cy="18" r="18" fill="#4CAF50"/>
-          <path d="M18 6C19.5913 6 21.1174 6.63214 22.2426 7.75736C23.3679 8.88258 24 10.4087 24 12C24 13.5913 23.3679 15.1174 22.2426 16.2426C21.1174 17.3679 19.5913 18 18 18C16.4087 18 14.8826 17.3679 13.7574 16.2426C12.6321 15.1174 12 13.5913 12 12C12 10.4087 12.6321 8.88258 13.7574 7.75736C14.8826 6.63214 16.4087 6 18 6ZM18 21C24.63 21 30 23.685 30 27V30H6V27C6 23.685 11.37 21 18 21Z" fill="white"/>
-        </svg>
-      `;
-      
-      // Обновляем обработчик клика для показа меню профиля
-      profileIcon.onclick = function(e) {
-        e.preventDefault();
-        showProfileMenu();
-      };
-    } else {
-      // Стандартная иконка профиля
-      profileIcon.innerHTML = `
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-          <path d="M18 6C19.5913 6 21.1174 6.63214 22.2426 7.75736C23.3679 8.88258 24 10.4087 24 12C24 13.5913 23.3679 15.1174 22.2426 16.2426C21.1174 17.3679 19.5913 18 18 18C16.4087 18 14.8826 17.3679 13.7574 16.2426C12.6321 15.1174 12 13.5913 12 12C12 10.4087 12.6321 8.88258 13.7574 7.75736C14.8826 6.63214 16.4087 6 18 6ZM18 21C24.63 21 30 23.685 30 27V30H6V27C6 23.685 11.37 21 18 21Z" fill="currentColor"/>
-        </svg>
-      `;
-      
-      // Возвращаем обработчик для открытия модалки
-      profileIcon.onclick = function(e) {
-        e.preventDefault();
-        openModal('login');
-      };
-    }
-  }
-  
-  function showProfileMenu() {
+  // Делаем showProfileMenu глобальной
+  window.showProfileMenu = function() {
     // Создаем выпадающее меню
     const menu = document.createElement('div');
     menu.className = 'profile-menu';
@@ -430,6 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Инициализация
   checkAuthStatus();
+  setActiveNavLink();
 });
 
 // ============================================
@@ -438,7 +472,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Функция показа сообщений
 function showMessage(message, type = 'info') {
-    const messageContainer = document.getElementById('messageContainer');
+    let messageContainer = document.getElementById('messageContainer');
+    
+    if (!messageContainer) {
+        messageContainer = document.getElementById('authMessage');
+    }
+    
     if (!messageContainer) return;
     
     messageContainer.innerHTML = `<div class="message message-${type}">${message}</div>`;

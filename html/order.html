@@ -582,6 +582,59 @@
             document.body.style.overflow = 'auto';
         }
         
+        // Сохранение заказа
+        document.querySelector('.btn-save').addEventListener('click', async function() {
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                alert('Пожалуйста, войдите в систему');
+                window.location.href = '/index.html';
+                return;
+            }
+            
+            // Сбор данных из формы
+            const orderData = {
+                pickupAddress: document.querySelectorAll('.form-input')[0].value,
+                deliveryAddress: document.querySelectorAll('.form-input')[1].value,
+                recipientPhone: document.querySelectorAll('.form-input')[2].value,
+                deliveryDate: document.querySelectorAll('.form-input')[3].value,
+                deliveryTime: document.querySelectorAll('.form-input')[4].value,
+                cargoType: document.querySelectorAll('.form-input')[5].value,
+                weight: document.querySelectorAll('.form-input')[6].value,
+                places: document.querySelectorAll('.form-input')[7].value,
+                conditions: document.querySelectorAll('.form-input')[8].value
+            };
+            
+            if (!orderData.pickupAddress || !orderData.deliveryAddress) {
+                alert('Заполните адреса отправления и доставки');
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    localStorage.setItem('lastOrderId', data.data.order.id);
+                    alert('Заказ сохранён! Перенаправляем на страницу отслеживания...');
+                    window.location.href = '/html/order-status.html';
+                } else {
+                    alert('Ошибка: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Не удалось сохранить заказ');
+            }
+        });
+        
         // Интерактивность для звёзд
         const stars = document.querySelectorAll('#track-modal-overlay .star');
         
@@ -629,8 +682,7 @@
             });
         });
     </script>
-</body>
-<script>
+    <script>
     // Анимация появления элементов при загрузке
     document.addEventListener('DOMContentLoaded', function() {
         const elements = document.querySelectorAll('.page-order .order-column, .page-order .page-title, .page-order .page-subtitle');
@@ -659,5 +711,7 @@
         });
     });
 </script>
+<script src="/js/script.js"></script>
 <script src="/js/burger.js"></script>
+</body>
 </html>
