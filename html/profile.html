@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>CityLogistics - Личный кабинет</title>
     <style>
         /* Дополнительные стили для профиля */
@@ -204,7 +204,7 @@
 </head>
 <body class="page-profile">
     <div class="navbar-wrap">
-         <a href="/index.html" class="navbar-logo-link">
+         <a href="../index.html" class="navbar-logo-link">
         <svg
           width="451"
           height="97"
@@ -235,12 +235,12 @@
         <nav class="navbar" id="navbar">
             <div class="container">
                 <ul class="navbar-menu">
-                    <li><a href="/html/about.html">О нас</a></li>
-                    <li><a href="/html/order.html">Оставить заявку</a></li>
-                    <li><a href="/html/contacts.html">Контакты</a></li>
-                           <li><a href="/html/order-status.html">Отследить заказ</a></li>  <!-- ← НОВЫЙ ПУНКТ -->
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="order.html">Оставить заявку</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                    <li><a href="order-status.html">Отследить заказ</a></li>
                 </ul>
-                <a href="/html/profile.html" class="navbar-profile" id="profileIcon">
+                <a href="profile.html" class="navbar-profile" id="profileIcon">
                     <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                         <path d="M18 6C19.5913 6 21.1174 6.63214 22.2426 7.75736C23.3679 8.88258 24 10.4087 24 12C24 13.5913 23.3679 15.1174 22.2426 16.2426C21.1174 17.3679 19.5913 18 18 18C16.4087 18 14.8826 17.3679 13.7574 16.2426C12.6321 15.1174 12 13.5913 12 12C12 10.4087 12.6321 8.88258 13.7574 7.75736C14.8826 6.63214 16.4087 6 18 6ZM18 21C24.63 21 30 23.685 30 27V30H6V27C6 23.685 11.37 21 18 21Z" fill="currentColor"/>
                     </svg>
@@ -334,7 +334,7 @@
                 <div class="card order-status-card">
                     <div class="card-header">
                         <h2 class="card-title">Текущий заказ</h2>
-                        <a href="/html/order-status.html">
+                        <a href="order-status.html">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2"/>
                             </svg>
@@ -464,7 +464,7 @@
             
             if (!token || !user.name) {
                 // Если не авторизован - перенаправляем на главную
-                window.location.href = '/index.html';
+                window.location.href = '../index.html';
                 return;
             }
             
@@ -478,12 +478,12 @@
         function fillUserData(user) {
             // Имя и фамилия
             const nameParts = (user.name || 'Пользователь').split(' ');
-            const firstName = nameParts[0] || 'Полина';
-            const lastName = nameParts[1] || 'Фронская';
+            const firstName = nameParts[0] || '';
+            const lastName = nameParts[1] || '';
             const middleName = nameParts[2] || '';
             
-            document.getElementById('userName').textContent = user.name || 'Полина Фронская';
-            document.getElementById('userEmail').textContent = user.email || 'polina@example.com';
+            document.getElementById('userName').textContent = user.name || 'Пользователь';
+            document.getElementById('userEmail').textContent = user.email || '';
             
             // Аватар с первой буквой имени
             const avatarInitial = document.getElementById('avatarInitial');
@@ -518,9 +518,11 @@
             if (activeOrders) activeOrders.textContent = user.activeOrders || '4';
         }
         
+        const API_URL = 'http://localhost:5000/api';
+        
         async function fetchUserData(token) {
             try {
-                const response = await fetch('http://localhost:5000/api/user', {
+                const response = await fetch(`${API_URL}/user`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -642,7 +644,7 @@
             logoutBtn.addEventListener('click', function() {
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
-                window.location.href = '/index.html';
+                window.location.href = '../index.html';
             });
         }
         
@@ -654,7 +656,7 @@
         const repeatBtn = document.getElementById('repeatOrderBtn');
         if (repeatBtn) {
             repeatBtn.addEventListener('click', function() {
-                window.location.href = '/html/order.html';
+                window.location.href = 'order.html';
             });
         }
         
@@ -674,8 +676,8 @@
             });
         }
     </script>
-    <script src="/js/script.js"></script>
-    <script src="/js/burger.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/burger.js"></script>
 
 </body>
 </html>

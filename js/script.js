@@ -290,13 +290,13 @@ document.addEventListener('DOMContentLoaded', function() {
             </svg>
             <span>Мой профиль</span>
           </a>
-          <a href="/settings" class="menu-item">
+          <button class="menu-item" id="menuSettings">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M19.14 12.94C19.18 12.74 19.2 12.54 19.2 12.34C19.2 12.14 19.18 11.94 19.14 11.74L21.16 9.98C21.3 9.85 21.34 9.65 21.26 9.48L19.38 6.19C19.3 6.02 19.12 5.92 18.94 5.95L16.64 6.49C16.24 6.1 15.78 5.78 15.28 5.54L14.94 3.18C14.92 3.01 14.78 2.88 14.6 2.88H9.4C9.22 2.88 9.08 3.01 9.06 3.18L8.72 5.54C8.22 5.78 7.76 6.1 7.36 6.49L5.06 5.95C4.88 5.92 4.7 6.02 4.62 6.19L2.74 9.48C2.66 9.65 2.7 9.85 2.84 9.98L4.86 11.74C4.82 11.94 4.8 12.14 4.8 12.34C4.8 12.54 4.82 12.74 4.86 12.94L2.84 14.7C2.7 14.83 2.66 15.03 2.74 15.2L4.62 18.49C4.7 18.66 4.88 18.76 5.06 18.73L7.36 18.19C7.76 18.58 8.22 18.9 8.72 19.14L9.06 21.5C9.08 21.67 9.22 21.8 9.4 21.8H14.6C14.78 21.8 14.92 21.67 14.94 21.5L15.28 19.14C15.78 18.9 16.24 18.58 16.64 18.19L18.94 18.73C19.12 18.76 19.3 18.66 19.38 18.49L21.26 15.2C21.34 15.03 21.3 14.83 21.16 14.7L19.14 12.94ZM12 15.6C10.06 15.6 8.48 14.02 8.48 12.08C8.48 10.14 10.06 8.56 12 8.56C13.94 8.56 15.52 10.14 15.52 12.08C15.52 14.02 13.94 15.6 12 15.6Z" fill="#888"/>
             </svg>
             <span>Настройки</span>
-          </a>
-          <button class="menu-item logout-btn">
+            </button>
+            <button class="menu-item logout-btn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.59L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" fill="#888"/>
             </svg>
@@ -447,6 +447,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (logoutBtn) {
       logoutBtn.addEventListener('click', function() {
         logout();
+        menu.remove();
+        style.remove();
+      });
+    }
+    
+    // Кнопка настроек
+    const settingsBtn = menu.querySelector('#menuSettings');
+    if (settingsBtn) {
+      settingsBtn.addEventListener('click', function() {
+        alert('Настройки профиля будут доступны в следующем обновлении');
         menu.remove();
         style.remove();
       });
