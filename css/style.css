@@ -892,6 +892,8 @@ color: #FFFFFF;
   background-color: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
   animation: fadeIn 0.3s ease;
+z-index: 10000;
+
 }
 
 .modal-content {
