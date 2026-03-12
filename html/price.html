@@ -1,17 +1,247 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>   
-     <meta charset="UTF-8" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CityLogistics — Пакеты услуг</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
-    <title>CityLogistics - Главная</title>
-    <script src="js/script.js"></script>
-  </head>
-  <body>
-    <!-- Шапка сайта -->
-    <header class="navbar-wrap">
-      <a href="index.html" class="navbar-logo-link">
+    .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+
+    .period-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .period-label {
+      font-size: 14px;
+      font-weight: 700;
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+    .period-btn {
+      padding: 8px 20px;
+      border: 1px solid #333;
+      border-radius: 4px;
+      background: transparent;
+      color: #fff;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .period-btn:hover { background: #262626; }
+    .period-btn.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .pricing-table th {
+      padding: 12px 8px;
+      vertical-align: bottom;
+    }
+    .pricing-table th:first-child {
+      text-align: left;
+      font-size: 20px;
+      font-weight: 700;
+      width: 40%;
+    }
+    .pricing-table th:nth-child(2),
+    .pricing-table th:nth-child(3) { width: 30%; }
+
+    .plan-header {
+      display: inline-block;
+      padding: 16px 24px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .plan-standard { background: #262626; }
+    .plan-premium { background: #fff; }
+    .plan-header .plan-name {
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+    .plan-header .plan-price {
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+    .plan-standard .plan-name { color: #fff; }
+    .plan-standard .plan-price { color: #fff; }
+    .plan-premium .plan-name { color: #b8860b; }
+    .plan-premium .plan-price { color: #000; }
+
+    .pricing-table tbody tr:nth-child(odd) { background: #1e1e1e; }
+    .pricing-table tbody tr:nth-child(even) { background: #2d2d2d; }
+
+    .pricing-table td {
+      padding: 20px 16px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .pricing-table td:first-child { line-height: 1.4; }
+    .pricing-table td:nth-child(2),
+    .pricing-table td:nth-child(3) { text-align: center; }
+
+    .check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: #22c55e;
+      border-radius: 50%;
+    }
+    .check svg {
+      width: 20px;
+      height: 20px;
+      stroke: #fff;
+      stroke-width: 3;
+      fill: none;
+    }
+
+    .discount-badge {
+      font-size: 11px;
+      background: #22c55e;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 4px;
+    }
+
+    .tariff-selection {
+      margin-top: 40px;
+      text-align: center;
+    }
+    .tariff-selection h3 {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    .tariff-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .tariff-btn {
+      padding: 10px 24px;
+      border: 1px solid #333;
+      border-radius: 4px;
+      background: transparent;
+      color: #fff;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tariff-btn:hover { background: #262626; }
+    .tariff-btn.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+    .pay-btn {
+      padding: 14px 48px;
+      background: #22c55e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pay-btn:hover {
+      background: #16a34a;
+    }
+
+    .toggle-label.active {
+      background: #facc15;
+      color: #000 !important;
+    }
+
+    .toggle-slider {
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-slider.active {
+      transform: translateX(30px);
+    }
+
+    @media (max-width: 640px) {
+      .user-type-toggle {
+        flex-direction: row;
+        gap: 12px !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 28px; }
+      .plan-header { padding: 10px 12px; }
+      .plan-header .plan-name,
+      .plan-header .plan-price { font-size: 16px; }
+      .pricing-table td { padding: 10px 4px; font-size: 11px; }
+      .check { width: 24px; height: 24px; }
+      .check svg { width: 14px; height: 14px; }
+    }
+
+    @media (max-width: 475px) {
+      h1 { font-size: 20px; text-align: center; }
+      .period-row { justify-content: center; gap: 6px; }
+      .period-label { font-size: 11px; }
+      .period-btn { padding: 5px 10px; font-size: 11px; }
+      
+      .pricing-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .pricing-table th, .pricing-table td {
+        white-space: normal;
+        font-size: 10px;
+        padding: 6px 4px;
+      }
+      .plan-header { padding: 8px 10px; }
+      .plan-header .plan-name, .plan-header .plan-price { font-size: 14px; }
+      .check { width: 18px; height: 18px; }
+      .check svg { width: 12px; height: 12px; }
+      
+      .tariff-selection h3 { font-size: 14px; }
+      .tariff-btn { padding: 8px 16px; font-size: 12px; }
+      .pay-btn { padding: 12px 32px; font-size: 14px; }
+    }
+  </style>
+</head>
+<body class="page-price">
+  <!-- Шапка -->
+  <div class="navbar-wrap">
+   <a href="../index.html" class="navbar-logo-link">
         <svg
           width="451"
           height="97"
@@ -34,252 +264,295 @@
           />
         </svg>
       </a>
-  <button class="burger-menu" id="burgerButton" aria-label="Меню">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-      <!-- Основная навигация -->
-<nav class="navbar" id="navbar">        <div class="container">
-<ul class="navbar-menu">
-            <li><a href="html/about.html">О нас</a></li>
-            <li><a href="html/price.html">Пакеты услуг</a></li>
-            <li><a href="html/order.html">Оставить заявку</a></li>
-          <li><a href="html/information.html">Обратная связь</a></li>            <li><a href="html/order-status.html">Отследить заказ</a></li>
-          </ul>
-          <a href="html/profile.html" class="navbar-profile">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-              <path
-                d="M18 6C19.5913 6 21.1174 6.63214 22.2426 7.75736C23.3679 8.88258 24 10.4087 24 12C24 13.5913 23.3679 15.1174 22.2426 16.2426C21.1174 17.3679 19.5913 18 18 18C16.4087 18 14.8826 17.3679 13.7574 16.2426C12.6321 15.1174 12 13.5913 12 12C12 10.4087 12.6321 8.88258 13.7574 7.75736C14.8826 6.63214 16.4087 6 18 6ZM18 21C24.63 21 30 23.685 30 27V30H6V27C6 23.685 11.37 21 18 21Z"
-                fill="currentColor"
-              />
-            </svg>
-          </a>
-        </div>
-      </nav>
-    </header>
-
-    <!-- Основное содержимое страницы -->
-    <main class="main_page">
-      <section class="main_text">
-        <header>
-          <h1>Доступная доставка малых партий грузов</h1>
-        </header>
-        <article>
-          <p>
-            Проектируемая платформа создана для малых и средних предприятий.
-            Приоритетными пользователями выступают организации, которым необходима
-            оперативная доставка сырья, комплектующих или готовой продукции на
-            малые расстояния.
-          </p>
-        </article>
-        <footer>
-          <a href="html/order.html" class="order-button">Заказать</a>
-        </footer>
-      </section>
-
-      <!-- Секция преимуществ -->
-      <section class="main-footer">
-        <article class="icon-block">
-          <figure class="img-block">
-            <img src="img/1icon.png" alt="Иконка транспорта" />
-          </figure>
-          <p>широкий выбор<br />транспорта</p>
-        </article>
-
-        <article class="icon-block">
-          <figure class="img-block">
-            <img src="img/2icon.png" alt="Иконка водителя" />
-          </figure>
-          <p>опытные водители</p>
-        </article>
-
-        <article class="icon-block">
-          <figure class="img-block">
-            <img src="img/3icon.png" alt="Иконка доставки" />
-          </figure>
-          <p>надёжная и оперативная<br />доставка</p>
-        </article>
-      </section>
-    </main>
-
-    <!-- Модальное окно авторизации -->
-    <dialog id="authModal" class="modal">
-      <div class="modal-content">
-        <header class="modal-header">
-          <h2 class="modal-title">Вход и регистрация</h2>
-          <button class="modal-close" id="closeModal">&times;</button>
-        </header>
-        
-        <main class="modal-body">
-          <!-- Переключатель между входом и регистрацией -->
-          <nav class="auth-tabs">
-            <button class="tab-btn active" data-tab="login">Вход</button>
-            <button class="tab-btn" data-tab="register">Регистрация</button>
-          </nav>
-          
-          <!-- Контейнер для форм с фиксированной высотой -->
-          <div class="forms-container">
-            <!-- Форма входа -->
-            <form id="loginFormElement" class="auth-form active">
-              <fieldset>
-                <div class="form-group">
-                  <label for="loginEmail">Email</label>
-                  <div class="input-with-icon">
-                    <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="#888"/>
-                    </svg>
-                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
-                  </div>
-                </div>
-                
-                <div class="form-group">
-                  <label for="loginPassword">Пароль</label>
-                  <div class="input-with-icon">
-                    <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15 8H9V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8Z" fill="#888"/>
-                    </svg>
-                    <input type="password" id="loginPassword" placeholder="••••••••" required>
-                    <button type="button" class="password-toggle" data-target="loginPassword">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5C17 19.5 21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12C15 10.34 13.66 9 12 9Z" fill="#888"/>
-                      </svg>
-                    </button>
-                  </div>
-                  <a href="#" class="forgot-password">Забыли пароль?</a>
-                </div>
-                
-                <button type="submit" class="btn-primary btn-full">
-                  <span class="btn-text">Войти</span>
-                  <svg class="btn-loader" width="20" height="20" viewBox="0 0 24 24" fill="none" style="display: none;">
-                    <path d="M12 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M4.93 4.93L7.76 7.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M16.24 16.24L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M2 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M18 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M4.93 19.07L7.76 16.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                </button>
-              </fieldset>
-              
-              <div class="divider">
-                <span>или</span>
-              </div>
-              
-              <button type="button" class="btn-social btn-google">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                </svg>
-                <span>Войти через Google</span>
-              </button>
-            </form>
-            <!-- Форма регистрации -->
-            <form id="registerFormElement" class="auth-form">
-              
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="regUsername">Имя пользователя</label>
-                    <div class="input-with-icon">
-                      <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="#888"/>
-                      </svg>
-                      <input type="text" id="regUsername" placeholder="ivan_2024" name="login" required minlength="3">
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="form-group">
-                  <label for="regEmail">Email</label>
-                  <div class="input-with-icon">
-                    <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="#888"/>
-                    </svg>
-                    <input type="email" id="regEmail" placeholder="your@email.com" required name="email">
-                  </div>
-                </div>
-                
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="regPassword">Пароль</label>
-                    <div class="input-with-icon">
-                      <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15 8H9V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8Z" fill="#888"/>
-                      </svg>
-                      <input type="password" id="regPassword" placeholder="••••••••" required minlength="6" name="password">
-                      <button type="button" class="password-toggle" data-target="regPassword">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5C17 19.5 21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12C15 10.34 13.66 9 12 9Z" fill="#888"/>
-                        </svg>
-                      </button>
-                    </div>
-                    <div class="password-strength">
-                      <div class="strength-meter">
-                        <div class="strength-bar"></div>
-                      </div>
-                      <span class="strength-text">Сложность пароля: слабый</span>
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="regConfirmPassword">Подтвердите пароль</label>
-                    <div class="input-with-icon">
-                      <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="#888"/>
-                      </svg>
-                      <input type="password" id="regConfirmPassword" placeholder="••••••••" required>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="form-group checkbox-group">
-                  <input type="checkbox" id="termsAgree" required>
-                  <label for="termsAgree">
-                    Я согласен с <a href="#" class="terms-link">условиями</a> и <a href="#" class="terms-link">политикой конфиденциальности</a>
-                  </label>
-                </div>
-                
-                <button type="submit" class="btn-primary btn-full">
-                  <span class="btn-text">Зарегистрироваться</span>
-                  <svg class="btn-loader" width="20" height="20" viewBox="0 0 24 24" fill="none" style="display: none;">
-                    <path d="M12 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M4.93 4.93L7.76 7.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M16.24 16.24L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M2 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M18 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M4.93 19.07L7.76 16.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                </button>
-              </fieldset>
-            </form>
-          </div>
-          
-          <!-- Уведомления -->
-          <div id="authMessage" class="auth-message"></div>
-        </main>
-        
-        <footer class="modal-footer">
-          <p>Нажимая кнопку, вы соглашаетесь с нашими правилами</p>
-        </footer>
+    <button class="burger-menu" id="burgerButton" aria-label="Меню">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav class="navbar" id="navbar">
+<div class="container page-content">
+        <ul class="navbar-menu">
+          <li><a href="about.html">О нас</a></li>
+          <li><a href="price.html" class="active">Пакеты услуг</a></li>
+          <li><a href="order.html">Оставить заявку</a></li>
+          <li><a href="information.html">Обратная связь</a></li>
+          <li><a href="../html/order-status.html">Отследить заказ</a></li>
+        </ul>
+        <a href="../html/profile.html" class="navbar-profile">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M18 6C19.5913 6 21.1174 6.63214 22.2426 7.75736C23.3679 8.88258 24 10.4087 24 12C24 13.5913 23.3679 15.1174 22.2426 16.2426C21.1174 17.3679 19.5913 18 18 18C16.4087 18 14.8826 17.3679 13.7574 16.2426C12.6321 15.1174 12 13.5913 12 12C12 10.4087 12.6321 8.88258 13.7574 7.75736C14.8826 6.63214 16.4087 6 18 6ZM18 21C24.63 21 30 23.685 30 27V30H6V27C6 23.685 11.37 21 18 21Z" fill="currentColor"/>
+          </svg>
+        </a>
       </div>
-    </dialog>
+    </nav>
+  </div>
 
-    <!-- Индикатор загрузки при успешной регистрации -->
-    <div id="successOverlay" class="success-overlay" style="display: none;">
-      <article class="success-content">
-        <svg class="success-icon" width="80" height="80" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM9.29 16.29L5.7 12.7C5.31 12.31 5.31 11.68 5.7 11.29C6.09 10.9 6.72 10.9 7.11 11.29L10 14.17L16.88 7.29C17.27 6.9 17.9 6.9 18.29 7.29C18.68 7.68 18.68 8.31 18.29 8.7L10.7 16.29C10.32 16.68 9.68 16.68 9.29 16.29Z" fill="#4CAF50"/>
-        </svg>
-        <h3>Регистрация успешна!</h3>
-        <p>Перенаправляем на вашу страницу...</p>
-      </article>
+  <div class="container" style="padding-top: 165px;">
+    <h1>ПАКЕТ УСЛУГ</h1>
+
+    <div class="user-type-toggle" style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 32px;">
+      <span id="toggle-customer" class="toggle-label active" style="font-size: 18px; font-weight: 700; cursor: pointer; padding: 8px 16px; border-radius: 8px; transition: all 0.3s;">Заказчик</span>
+      <div class="toggle-switch" style="width: 60px; height: 30px; background: #333; border-radius: 30px; position: relative; cursor: pointer;">
+        <div class="toggle-slider" style="width: 26px; height: 26px; background: #facc15; border-radius: 50%; position: absolute; top: 2px; left: 2px;"></div>
+      </div>
+      <span id="toggle-driver" class="toggle-label" style="font-size: 18px; font-weight: 700; cursor: pointer; padding: 8px 16px; border-radius: 8px; transition: all 0.3s; color: #666;">Водитель</span>
     </div>
-    <script src="js/burger.js"></script>
-  </body>
+
+    <div class="period-row">
+      <span class="period-label">ЦЕНА ЗА ПЕРИОД</span>
+      <button class="period-btn active" data-period="1">1 мес</button>
+      <button class="period-btn" data-period="2">2 мес</button>
+      <button class="period-btn" data-period="3">3 мес</button>
+    </div>
+
+    <table class="pricing-table" id="customer-table">
+      <thead>
+        <tr>
+          <th>Услуги</th>
+          <th>
+            <div class="plan-header plan-standard">
+              <div class="plan-name">Стандарт</div>
+              <div class="plan-price"><span id="standard-price">30</span> BYN<span id="standard-badge" class="discount-badge" style="display:none;"></span></div>
+            </div>
+          </th>
+          <th>
+            <div class="plan-header plan-premium">
+              <div class="plan-name">Премиум</div>
+              <div class="plan-price"><span id="premium-price">50</span> BYN<span id="premium-badge" class="discount-badge" style="display:none;"></span></div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Размещение заявок<br>на перевозку</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Поиск транспорта</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Доступ к истории<br>заказов</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Фильтрация заказов</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Умный-поиск<br>перевозчика</td>
+          <td></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Умная загрузка<br>данных</td>
+          <td></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Отслеживание<br>маршрута</td>
+          <td></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Электронный<br>документооборот</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Расширенная аналитика<br>по перевозчикам</td>
+          <td></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Таблица для водителей -->
+    <table class="pricing-table" id="driver-table" style="display: none;">
+      <thead>
+        <tr>
+          <th>Услуги</th>
+          <th>
+            <div class="plan-header plan-standard">
+              <div class="plan-name">Стандарт</div>
+              <div class="plan-price"><span id="driver-standard-price">25</span> BYN</div>
+            </div>
+          </th>
+          <th>
+            <div class="plan-header plan-premium">
+              <div class="plan-name">Премиум</div>
+              <div class="plan-price"><span id="driver-premium-price">45</span> BYN</div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Доступ к заказам<br>на перевозку</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Поиск грузов<br>в приложении</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Доступ к истории<br>выполненных заказов</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Умный подбор<br>заказов под транспорт</td>
+          <td></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Приоритетная<br>поддержка 24/7</td>
+          <td></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Доступ к<br>мультидоставкам</td>
+          <td></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Электронный<br>документооборот</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Рейтинг и<br>отзывы клиентов</td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Бонусы за<br>рейтинг</td>
+          <td></td>
+          <td><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="tariff-selection">
+      <h3>Выберите тариф</h3>
+      <div class="tariff-buttons">
+        <button class="tariff-btn active" data-tariff="standard">Стандарт</button>
+        <button class="tariff-btn" data-tariff="premium">Премиум</button>
+      </div>
+      <button class="pay-btn" id="payBtn">Оплатить <span id="payAmount">30</span> BYN</button>
+    </div>
+  </div>
+
+  <script src="../js/burger.js"></script>
+  <script>
+    const prices = {
+      1: { standard: 30, premium: 50 },
+      2: { standard: 55, premium: 90 },
+      3: { standard: 75, premium: 120 }
+    };
+
+    document.querySelectorAll('.period-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const period = parseInt(this.dataset.period);
+        const standardPrice = prices[period].standard;
+        const premiumPrice = prices[period].premium;
+        
+        document.getElementById('standard-price').textContent = standardPrice;
+        document.getElementById('premium-price').textContent = premiumPrice;
+        
+        const driverStandardPrice = driverPrices[period].standard;
+        const driverPremiumPrice = driverPrices[period].premium;
+        document.getElementById('driver-standard-price').textContent = driverStandardPrice;
+        document.getElementById('driver-premium-price').textContent = driverPremiumPrice;
+        
+        updatePayButton();
+      });
+    });
+
+    let currentTariff = 'standard';
+    let isDriver = false;
+
+    const driverPrices = {
+      1: { standard: 25, premium: 45 },
+      2: { standard: 45, premium: 80 },
+      3: { standard: 60, premium: 110 }
+    };
+
+    function updatePayButton() {
+      const activePeriod = document.querySelector('.period-btn.active');
+      const period = parseInt(activePeriod.dataset.period);
+      let price;
+      if (isDriver) {
+        price = driverPrices[period][currentTariff];
+      } else {
+        price = prices[period][currentTariff];
+      }
+      document.getElementById('payAmount').textContent = price;
+    }
+
+    document.querySelectorAll('.tariff-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tariff-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentTariff = this.dataset.tariff;
+        updatePayButton();
+      });
+    });
+
+    document.getElementById('payBtn').addEventListener('click', function() {
+      const activePeriod = document.querySelector('.period-btn.active');
+      const period = activePeriod.dataset.period;
+      const tariff = currentTariff;
+      let price;
+      if (isDriver) {
+        price = driverPrices[period][tariff];
+      } else {
+        price = prices[period][tariff];
+      }
+      alert(`Оплата тарифа "${tariff === 'standard' ? 'Стандарт' : 'Премиум'}" на ${period} мес. Сумма: ${price} BYN`);
+    });
+
+    // Toggle between customer and driver
+
+    function toggleUserType() {
+      isDriver = !isDriver;
+      var slider = document.querySelector('.toggle-slider');
+      var customerLabel = document.getElementById('toggle-customer');
+      var driverLabel = document.getElementById('toggle-driver');
+      var title = document.querySelector('h1');
+      
+      if (isDriver) {
+        slider.classList.add('active');
+        customerLabel.classList.remove('active');
+        driverLabel.classList.add('active');
+        document.getElementById('customer-table').style.display = 'none';
+        document.getElementById('driver-table').style.display = 'table';
+        title.textContent = 'ПАКЕТ УСЛУГ ДЛЯ ВОДИТЕЛЯ';
+      } else {
+        slider.classList.remove('active');
+        driverLabel.classList.remove('active');
+        customerLabel.classList.add('active');
+        document.getElementById('driver-table').style.display = 'none';
+        document.getElementById('customer-table').style.display = 'table';
+        title.textContent = 'ПАКЕТ УСЛУГ';
+      }
+      updatePayButton();
+    }
+
+    // Event listeners for toggle
+    document.getElementById('toggle-customer').addEventListener('click', toggleUserType);
+    document.getElementById('toggle-driver').addEventListener('click', toggleUserType);
+    document.querySelector('.toggle-switch').addEventListener('click', toggleUserType);
+  </script>
+</body>
 </html>
